@@ -34,7 +34,7 @@
                 @enderror
 
                 <select class="form-select mt-3" name="category_id">
-                    <option selected>selezione una categoria</option>
+                    <option  value="">selezione una categoria</option>
                     @foreach ( $categories as $category )
                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                     @endforeach
@@ -42,6 +42,19 @@
 
                 </select>
             </div>
+
+            <div class="mb-3">
+                @foreach ( $tags as $tag )
+                <input type="checkbox"
+                name="tags[]"
+                id="tag-{{ $loop->iteration }}"
+                value="{{ $tag->id }}"
+                @if (in_array($tag->id, old("tags",[]))) checked @endif>
+                <label for="">{{ $tag->name }}</label>
+                @endforeach
+            </div>
+
+
 
 
 
