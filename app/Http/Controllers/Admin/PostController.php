@@ -77,7 +77,8 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $categories = Category::all();
-       return view("post-crud.edit", compact("post","categories"));
+        $tags = Tag::all();
+       return view("post-crud.edit", compact("post","categories","tags"));
     }
 
     /**
@@ -90,7 +91,19 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         $data = $request->all();
+
+        if($data["title"] != $post->title){
+            $data["slug"] = Post::generateSlug($data["title"]);
+        }
+
         $post->update($data);
+
+        if(array_key_exists("tags", $data)){
+            $post->tags()->sync($data["tags"]);
+        }else{
+            $post->tags()->detach();
+        }
+
         return redirect()->route("admin.post.show",$post);
     }
 

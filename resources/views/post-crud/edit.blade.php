@@ -37,13 +37,29 @@
         </div>
 
         <select class="form-select my-3" name="category_id">
-            <option selected>selezione una categoria</option>
+            <option value="">selezione una categoria</option>
             @foreach ( $categories as $category )
                 <option value="{{ $category->id }}">{{ $category->name }}</option>
             @endforeach
 
 
         </select>
+
+        <div class="mb-3">
+            @foreach ( $tags as $tag )
+            <input type="checkbox"
+            name="tags[]"
+            id="tag-{{ $loop->iteration }}"
+            value="{{ $tag->id }}"
+            @if (!$errors->any() && $post->tags->contains($tag->id))
+                checked
+            @elseif ($errors->any() && in_array($tag->id, old("tags",[])))
+                checked
+            @endif
+            @if (in_array($tag->id, old("tags",[])) || $post->tags->contains($tag->id)) checked @endif>
+            <label for="tag-{{ $loop->iteration }}">{{ $tag->name }}</label>
+            @endforeach
+        </div>
 
 
 
